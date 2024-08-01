@@ -11,6 +11,7 @@ int main()
         e.chave = i;
         insere_vertice (g,e);
     }
+    insere_aresta(g, 0, 5, 7);
     insere_aresta(g, 1, 2, 10);
     insere_aresta(g, 1, 4, 1);
     insere_aresta(g, 1, 5, 3);
@@ -21,5 +22,7 @@ int main()
 
     int distancia = dijkstra(g, 1, 2);
     printf ("\nCusto total = %d\n", distancia);
+    printf("\nÁrvore Geradora Mínima\n");
+    agmPrim(g, 1);
     return 0;
 }

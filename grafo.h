@@ -1,8 +1,6 @@
-#ifndef GRAFO_H_INCLUDED
-#define GRAFO_H_INCLUDED
+#pragma once
 
 #include <limits.h>
-
 #define MAX 10
 #define INFINITO INT_MAX
 #define MEMBRO 1
@@ -44,4 +42,4 @@ int remove_vertive(grafo,TChave);
 int remove_aresta(grafo,TChave,TChave);
 void imprime_grafo(grafo);
 int dijkstra(grafo g, TChave origem, TChave destino);
-#endif // GRAFO_H_INCLUDED
+int agmPrim(grafo g, TChave origem);

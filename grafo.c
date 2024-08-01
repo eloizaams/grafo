@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "grafo.h"
-
+#include "lista.h"
 
 grafo cria_grafo(){
   grafo g;
@@ -145,4 +145,49 @@ int dijkstra(grafo g, TChave origem, TChave destino){
   }
   printf("\n");
   return vCusto[t];
+}
+void insereAdjacentes(grafo g, lista li, int linha){
+  int c;
+  TElementoLista e;
+  //verificando os adjacentes ao vértice corrente ainda não processados
+  for(c = 0; c < g->nv; c++){
+    if(g->vertices[c].status != processado && g->arestas[linha][c].conectado == 1){
+      e.ch1 = g->vertices[linha].info.chave;
+      e.ch2 = g->vertices[c].info.chave;
+      e.chave = g->arestas[linha][c].peso;
+      insereOrdenado(li,e);
+    } 
+  }
+}
+
+int agmPrim(grafo g, TChave origem){
+    int i, linha, cont=1, posicao;
+    lista li = criaLista();
+    TElementoLista elemento;
+
+
+    linha = pesquisa_vertice(g, origem);
+    if(linha == -1)
+      return 0;
+
+    //mudando o status de cada vértice
+    for(i=0; i<g->nv; i++){
+      g->vertices[i].status = espera;
+    }
+
+    g->vertices[linha].status = processado;
+    printf("%d\n", g->nv);
+    insereAdjacentes(g, li, linha);
+    while(cont < g->nv && !listaVazia(li)){
+      retiraInicio(li, &elemento);
+      posicao = pesquisa_vertice(g, elemento.ch2);
+      if(g->vertices[posicao].status != processado){
+        g->vertices[posicao].status = processado;
+        insereAdjacentes(g, li, posicao);
+        printf("%d---->%d\n", elemento.ch1, elemento.ch2);
+        cont++;
+      }
+    }
+    terminaLista(li);
+    return 1;
 }
