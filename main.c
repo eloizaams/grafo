@@ -24,5 +24,9 @@ int main()
     printf ("\nCusto total = %d\n", distancia);
     printf("\nÁrvore Geradora Mínima\n");
     agmPrim(g, 1);
+    dfs(g, 1);
+    bfs(g, 1);
+    dfs_nr(g,1);
+
     return 0;
 }

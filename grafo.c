@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include "grafo.h"
 #include "lista.h"
+#include "fila.h"
+#include "pilha.h"
 
 grafo cria_grafo(){
   grafo g;
@@ -23,8 +25,8 @@ void termina_grafo(grafo g){
 /*retorna - 1 se não encontrar */
 int pesquisa_vertice(grafo g, TChave ch){
   int i;
-  for(i=0;i<g->nv;i++)
-    if(g->vertices[i].info.chave ==ch)
+  for(i=0; i<g->nv; i++)
+    if(g->vertices[i].info.chave == ch)
       return i;
   return -1;
 }
@@ -190,4 +192,122 @@ int agmPrim(grafo g, TChave origem){
     }
     terminaLista(li);
     return 1;
+}
+
+void percorre (grafo g, int linha, int verticesProcessados){
+  int k;
+  g->vertices[linha].status = processado;
+  printf("%d\n", g->vertices[linha].info.chave);
+  verticesProcessados++;
+  for(k = 0; k < g->nv && verticesProcessados < g->nv; k++){
+    if (g->arestas[linha][k].conectado && g->vertices[k].status == espera){
+      percorre(g,k,verticesProcessados);
+    }
+  }
+
+}
+
+int dfs(grafo g, TChave origem){
+    int corrente, i;
+    corrente = pesquisa_vertice(g, origem);
+    printf("\nBusca em Profundidade\n");
+    if(corrente == -1)
+      return 0;
+    for(i = 0; i < g->nv; i++)
+      g->vertices[i].status = espera;
+    percorre(g, corrente, 0);
+    return 1;
+}
+
+
+int bfs(grafo g, TChave origem){
+
+  fila fi;
+  TElementoFila ef;
+  TElemento eg;
+  int i, k;
+
+  fi = criaFila();
+
+  //mudando o status dos vértices
+  for(i = 0; i < g->nv; i++)
+    g->vertices[i].status = espera;
+  
+
+  ef.chave = pesquisa_vertice(g, origem);
+
+  g->vertices[origem].status = pronto;
+  colocaFila(fi, ef);
+
+  printf("\nBusca em Largura\n");
+  while(!filaVazia(fi)){
+
+    retiraFila(fi, &ef);
+    printf("%d\n", ef.chave);
+    i = ef.chave;
+    g->vertices[i].status = processado;
+    for(k = 0; k < g->nv; k++){
+      if (g->arestas[i][k].conectado && g->vertices[k].status == espera){
+          ef.chave = k;
+          colocaFila(fi,ef);
+         
+          g->vertices[k].status = pronto;
+      }
+    }
+  }
+  terminaFila(fi);
+  return 1;
+}
+
+
+int dfs_nr(grafo g, TChave origem){
+  TElementoPilha ep;
+  int corrente, i, k, verticesProcessados = 0;
+  
+  corrente = pesquisa_vertice(g, origem);
+ 
+  printf("\nBusca em Profundidade - Não recursiva\n");
+ 
+  if(corrente == -1)
+    return 0;
+  
+  for(i = 0; i < g->nv; i++)
+    g->vertices[i].status = espera;
+ 
+  pilha pi = criaPilha();
+  ep.chave = g->vertices[corrente].info.chave;
+  colocaPilha(pi, ep);
+  g->vertices[corrente].status = processado; 
+  printf("%d\n", g->vertices[corrente].info.chave);
+  verticesProcessados++;
+  
+  while(!pilhaVazia(pi)){
+    int encontrou = 0;
+    for(k = 0; k < g->nv && verticesProcessados < g->nv; k++){
+      if (g->arestas[corrente][k].conectado && g->vertices[k].status == espera){
+        corrente = k;
+        ep.chave = g->vertices[corrente].info.chave;
+        colocaPilha(pi, ep);
+        g->vertices[corrente].status = processado; 
+        printf("%d\n", g->vertices[corrente].info.chave);
+        verticesProcessados++;
+        encontrou = 1;
+
+        break;
+      }
+    }
+
+    if(encontrou == 0){ 
+      retiraPilha(pi, &ep);
+
+      if(retiraPilha(pi, &ep)){
+        corrente = pesquisa_vertice(g, ep.chave);
+        colocaPilha(pi, ep);
+      }
+    }
+
+  }
+  printf("\n");
+  terminaPilha(pi);
+  return 1;
 }

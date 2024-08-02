@@ -43,3 +43,6 @@ int remove_aresta(grafo,TChave,TChave);
 void imprime_grafo(grafo);
 int dijkstra(grafo g, TChave origem, TChave destino);
 int agmPrim(grafo g, TChave origem);
+int dfs(grafo g, TChave origem); //busca em profundiade
+int bfs(grafo g, TChave origem); //busco em amplitude
+int dfs_nr(grafo g, TChave origem); //busca em profundiade - não recursiva
