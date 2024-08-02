@@ -20,13 +20,17 @@ int main()
     insere_aresta(g, 2, 5, 1);
     insere_aresta(g, 4, 5, 1);
 
-    int distancia = dijkstra(g, 1, 2);
-    printf ("\nCusto total = %d\n", distancia);
-    printf("\nÁrvore Geradora Mínima\n");
-    agmPrim(g, 1);
-    dfs(g, 1);
-    bfs(g, 1);
-    dfs_nr(g,1);
+    printf("\nElementos grafo lista adjacância\n");
+    imprime_grafo(g);
+    
+    remove_aresta(g, 5, 4);
+    printf("\nElementos grafo lista adjacância após remoção de aresta\n");
+    imprime_grafo(g);
 
+    remove_vertice(g, 2);
+    printf("\nElementos grafo lista adjacância após remoção de vertice\n");
+    imprime_grafo(g);
+
+    printf("\n\n");
     return 0;
 }

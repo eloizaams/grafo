@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "lista.h"
+#include "grafo.h"
 
 lista criaLista(){
     lista l = malloc(sizeof(TLista));
@@ -62,18 +63,49 @@ int insereOrdenado(lista l, TElementoLista e){
     return 1;
 }
 
-int retiraInicio(lista l, TElementoLista *e){
-    TNodo *p;
+int retiraElemento(lista l, TChave ch, TElementoLista *e){
+    TNodo *p, *pAnt;
     if(listaVazia(l))
         return 0;
+
     p = l->inicio;
-    l->inicio = l->inicio->prox;
-    l->tamanho--;
-    *e = p->info;
-    free(p);
-    return 1;
+    pAnt = p;
+
+    while(p){
+        
+        if (p->info.chave == ch){
+            if (p == l->inicio){
+                l->inicio = p->prox;
+            }
+            if (p == l->fim){
+                l->fim = pAnt;
+            }
+            pAnt->prox = p->prox;
+            *e = p->info;
+            free(p);
+            l->tamanho--;
+            return 1;
+        }
+        pAnt = p;
+        p = p->prox;
+    }  
+    
+    return 0;
 }
 
 int listaVazia(lista l){
     return l->tamanho == 0;
+}
+
+int tamanhoLista(lista l){
+    return l->tamanho;
+}
+
+void imprimeLista(lista l){
+    TNodo *p; 
+    p = l->inicio;
+    while(p){
+        printf(" v - %d ", p->info.chave);
+        p = p->prox;
+    }
 }

@@ -1,6 +1,7 @@
 #pragma once
 
-#include "grafo.h"
+
+typedef unsigned int TPeso;
 
 typedef int TChaveLista;
 typedef struct{
